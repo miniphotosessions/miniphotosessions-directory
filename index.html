@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniShoot - Find Mini Photo Session Photographers Near You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .btn-secondary:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Metro Selection */
+        .metro-selection {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .metro-selection h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .metro-selection p {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #666;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .metro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .metro-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .metro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .metro-card h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .metro-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Photographer Listings */
+        .listings {
+            padding: 4rem 0;
+        }
+
+        .filters {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .photographer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .photographer-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .photographer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .photographer-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .photographer-info {
+            padding: 1.5rem;
+        }
+
+        .photographer-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .photographer-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .photographer-bio {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .photographer-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .photographer-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photographer-actions .btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #666;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card .period {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        .pricing-features li:before {
+            content: "✓ ";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .photographer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metro-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">📸 MiniShoot</div>
+            <div class="nav-links">
+                <a href="#" onclick="showHome()">Home</a>
+                <a href="#" onclick="showSection('pricing')">For Photographers</a>
+                <a href="#" onclick="showLoginModal()">Login</a>
+                <a href="#" onclick="showSignupModal()" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="homePage">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Find the Perfect Mini Photo Session Photographer</h1>
+                <p>Connect with talented photographers in your area for quick, affordable photo sessions</p>
+                <a href="#metro-selection" class="btn btn-primary" style="display: inline-block; margin-top: 1rem;">Find Photographers Near You</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose MiniShoot?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📍</div>
+                        <h3>Local Photographers</h3>
+                        <p>Find talented photographers in your metro area with just a few clicks</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>Transparent Pricing</h3>
+                        <p>See pricing upfront and filter by your budget</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>Easy Booking</h3>
+                        <p>Check availability and book sessions directly with premium photographers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metro Selection -->
+        <section id="metro-selection" class="metro-selection">
+            <div class="container">
+                <h2>Select Your Metro Area</h2>
+                <p>Choose your location to find mini session photographers near you</p>
+                
+                <div class="search-bar">
+                    <input type="text" id="metroSearch" placeholder="Search for your city..." onkeyup="filterMetros()">
+                </div>
+
+                <div class="metro-grid" id="metroGrid">
+                    <!-- Metro areas will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="pricing">
+            <div class="container">
+                <h2>Photographer Pricing Plans</h2>
+                <p class="pricing-subtitle">Join our community and grow your photography business</p>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Basic</h3>
+                        <div class="price">$10</div>
+                        <div class="period">per month</div>
+                        <ul class="pricing-features">
+                            <li>Professional bio</li>
+                            <li>Portfolio showcase</li>
+                            <li>Contact information</li>
+                            <li>Social media links</li>
+                            <li>Email support</li>
+                        </ul>
+                        <button class="btn btn-secondary" onclick="showSignupModal('basic')">Get Started</button>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <h3>Premium</h3>
+                        <div class="price">$25</div>
+                        <div class="period">per month</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Basic</li>
+                            <li>Availability calendar</li>
+                            <li>Online booking system</li>
+                            <li>Priority listing</li>
+                            <li>Analytics dashboard</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="showSignupModal('premium')">Get Started</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Metro Area Page (Hidden by default) -->
+    <div id="metroPage" class="hidden">
+        <section class="hero" style="padding: 2rem 0;">
+            <div class="container">
+                <h1 id="metroTitle"></h1>
+                <p id="metroSubtitle">Browse mini session photographers in your area</p>
+            </div>
+        </section>
+
+        <section class="listings">
+            <div class="container">
+                <div class="filters">
+                    <div class="filter-group">
+                        <div>
+                            <label>Price Range</label>
+                            <select id="priceFilter" onchange="filterPhotographers()">
+                                <option value="">All Prices</option>
+                                <option value="0-100">Under $100</option>
+                                <option value="100-200">$100 - $200</option>
+                                <option value="200-300">$200 - $300</option>
+                                <option value="300-500">$300 - $500</option>
+                                <option value="500+">$500+</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Availability</label>
+                            <select id="availabilityFilter" onchange="filterPhotographers()">
+                                <option value="">All Photographers</option>
+                                <option value="available">Available This Week</option>
+                                <option value="premium">With Online Booking</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Sort By</label>
+                            <select id="sortFilter" onchange="filterPhotographers()">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="newest">Newest</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photographer-grid" id="photographerGrid">
+                    <!-- Photographers will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MiniShoot</h3>
+                    <p>Connecting photographers with clients for mini photo sessions nationwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>For Clients</h3>
+                    <ul>
+                        <li><a href="#">Find Photographers</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>For Photographers</h3>
+                    <ul>
+                        <li><a href="#" onclick="showSection('pricing')">Pricing</a></li>
+                        <li><a href="#" onclick="showSignupModal()">Sign Up</a></li>
+                        <li><a href="#" onclick="showLoginModal()">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MiniShoot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="close-modal" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <p style="text-align: center; margin-top: 1rem; color: #666;">
+                    Don't have an account? <a href="#" onclick="closeModal('loginModal'); showSignupModal();" style="color: #e74c3c;">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up as Photographer</h2>
+                <button class="close-modal" onclick="closeModal('signupModal')">&times;</button>
+            </div>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Business Name</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Metro Area</label>
+                    <select id="signupMetro" required>
+                        <option value="">Select your metro area...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Plan</label>
+                    <select id="planSelect" required>
+                        <option value="basic">Basic - $10/month</option>
+                        <option value="premium">Premium - $25/month</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                <p style="text-align: center; margin-top: 1rem; color: #666;">
+                    Already have an account? <a href="#" onclick="closeModal('signupModal'); showLoginModal();" style="color: #e74c3c;">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Photographer Dashboard Modal (after login) -->
+    <div id="dashboardModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Photographer Dashboard</h2>
+                <button class="close-modal" onclick="closeModal('dashboardModal')">&times;</button>
+            </div>
+            <div id="dashboardContent">
+                <!-- Dashboard content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for metro areas (major US cities)
+        const metroAreas = [
+            // Top 50 Metro Areas
+            { id: 'nyc', name: 'New York City', state: 'NY', photographers: 145 },
+            { id: 'la', name: 'Los Angeles', state: 'CA', photographers: 128 },
+            { id: 'chicago', name: 'Chicago', state: 'IL', photographers: 98 },
+            { id: 'dallas', name: 'Dallas', state: 'TX', photographers: 87 },
+            { id: 'houston', name: 'Houston', state: 'TX', photographers: 92 },
+            { id: 'washington-dc', name: 'Washington', state: 'DC', photographers: 76 },
+            { id: 'philadelphia', name: 'Philadelphia', state: 'PA', photographers: 71 },
+            { id: 'miami', name: 'Miami', state: 'FL', photographers: 83 },
+            { id: 'atlanta', name: 'Atlanta', state: 'GA', photographers: 79 },
+            { id: 'phoenix', name: 'Phoenix', state: 'AZ', photographers: 68 },
+            { id: 'boston', name: 'Boston', state: 'MA', photographers: 82 },
+            { id: 'san-francisco', name: 'San Francisco', state: 'CA', photographers: 94 },
+            { id: 'riverside', name: 'Riverside', state: 'CA', photographers: 52 },
+            { id: 'detroit', name: 'Detroit', state: 'MI', photographers: 58 },
+            { id: 'seattle', name: 'Seattle', state: 'WA', photographers: 85 },
+            { id: 'minneapolis', name: 'Minneapolis', state: 'MN', photographers: 64 },
+            { id: 'san-diego', name: 'San Diego', state: 'CA', photographers: 73 },
+            { id: 'tampa', name: 'Tampa', state: 'FL', photographers: 61 },
+            { id: 'denver', name: 'Denver', state: 'CO', photographers: 69 },
+            { id: 'st-louis', name: 'St. Louis', state: 'MO', photographers: 47 },
+            { id: 'baltimore', name: 'Baltimore', state: 'MD', photographers: 53 },
+            { id: 'charlotte', name: 'Charlotte', state: 'NC', photographers: 59 },
+            { id: 'orlando', name: 'Orlando', state: 'FL', photographers: 66 },
+            { id: 'san-antonio', name: 'San Antonio', state: 'TX', photographers: 57 },
+            { id: 'portland', name: 'Portland', state: 'OR', photographers: 63 },
+            { id: 'sacramento', name: 'Sacramento', state: 'CA', photographers: 51 },
+            { id: 'pittsburgh', name: 'Pittsburgh', state: 'PA', photographers: 44 },
+            { id: 'las-vegas', name: 'Las Vegas', state: 'NV', photographers: 62 },
+            { id: 'austin', name: 'Austin', state: 'TX', photographers: 71 },
+            { id: 'cincinnati', name: 'Cincinnati', state: 'OH', photographers: 43 },
+            { id: 'kansas-city', name: 'Kansas City', state: 'MO', photographers: 48 },
+            { id: 'columbus', name: 'Columbus', state: 'OH', photographers: 56 },
+            { id: 'indianapolis', name: 'Indianapolis', state: 'IN', photographers: 49 },
+            { id: 'cleveland', name: 'Cleveland', state: 'OH', photographers: 42 },
+            { id: 'san-jose', name: 'San Jose', state: 'CA', photographers: 67 },
+            { id: 'nashville', name: 'Nashville', state: 'TN', photographers: 65 },
+            { id: 'virginia-beach', name: 'Virginia Beach', state: 'VA', photographers: 46 },
+            { id: 'providence', name: 'Providence', state: 'RI', photographers: 38 },
+            { id: 'milwaukee', name: 'Milwaukee', state: 'WI', photographers: 41 },
+            { id: 'jacksonville', name: 'Jacksonville', state: 'FL', photographers: 54 },
+            { id: 'oklahoma-city', name: 'Oklahoma City', state: 'OK', photographers: 37 },
+            { id: 'raleigh', name: 'Raleigh', state: 'NC', photographers: 58 },
+            { id: 'memphis', name: 'Memphis', state: 'TN', photographers: 39 },
+            { id: 'richmond', name: 'Richmond', state: 'VA', photographers: 42 },
+            { id: 'new-orleans', name: 'New Orleans', state: 'LA', photographers: 45 },
+            { id: 'louisville', name: 'Louisville', state: 'KY', photographers: 36 },
+            { id: 'salt-lake-city', name: 'Salt Lake City', state: 'UT', photographers: 47 },
+            { id: 'hartford', name: 'Hartford', state: 'CT', photographers: 35 },
+            { id: 'buffalo', name: 'Buffalo', state: 'NY', photographers: 33 },
+            { id: 'birmingham', name: 'Birmingham', state: 'AL', photographers: 34 },
+            
+            // 51-100 Metro Areas
+            { id: 'rochester', name: 'Rochester', state: 'NY', photographers: 31 },
+            { id: 'grand-rapids', name: 'Grand Rapids', state: 'MI', photographers: 32 },
+            { id: 'tucson', name: 'Tucson', state: 'AZ', photographers: 38 },
+            { id: 'fresno', name: 'Fresno', state: 'CA', photographers: 29 },
+            { id: 'tulsa', name: 'Tulsa', state: 'OK', photographers: 28 },
+            { id: 'worcester', name: 'Worcester', state: 'MA', photographers: 27 },
+            { id: 'albuquerque', name: 'Albuquerque', state: 'NM', photographers: 35 },
+            { id: 'bridgeport', name: 'Bridgeport', state: 'CT', photographers: 26 },
+            { id: 'bakersfield', name: 'Bakersfield', state: 'CA', photographers: 24 },
+            { id: 'omaha', name: 'Omaha', state: 'NE', photographers: 33 },
+            { id: 'knoxville', name: 'Knoxville', state: 'TN', photographers: 30 },
+            { id: 'el-paso', name: 'El Paso', state: 'TX', photographers: 25 },
+            { id: 'mcallen', name: 'McAllen', state: 'TX', photographers: 22 },
+            { id: 'albany', name: 'Albany', state: 'NY', photographers: 28 },
+            { id: 'baton-rouge', name: 'Baton Rouge', state: 'LA', photographers: 27 },
+            { id: 'dayton', name: 'Dayton', state: 'OH', photographers: 26 },
+            { id: 'columbia', name: 'Columbia', state: 'SC', photographers: 29 },
+            { id: 'charleston', name: 'Charleston', state: 'SC', photographers: 34 },
+            { id: 'greenville', name: 'Greenville', state: 'SC', photographers: 31 },
+            { id: 'boise', name: 'Boise', state: 'ID', photographers: 36 },
+            { id: 'des-moines', name: 'Des Moines', state: 'IA', photographers: 28 },
+            { id: 'madison', name: 'Madison', state: 'WI', photographers: 32 },
+            { id: 'spokane', name: 'Spokane', state: 'WA', photographers: 25 },
+            { id: 'wichita', name: 'Wichita', state: 'KS', photographers: 23 },
+            { id: 'colorado-springs', name: 'Colorado Springs', state: 'CO', photographers: 37 },
+            { id: 'little-rock', name: 'Little Rock', state: 'AR', photographers: 24 },
+            { id: 'augusta', name: 'Augusta', state: 'GA', photographers: 22 },
+            { id: 'chattanooga', name: 'Chattanooga', state: 'TN', photographers: 26 },
+            { id: 'stockton', name: 'Stockton', state: 'CA', photographers: 23 },
+            { id: 'shreveport', name: 'Shreveport', state: 'LA', photographers: 21 },
+            { id: 'mobile', name: 'Mobile', state: 'AL', photographers: 20 },
+            { id: 'fort-wayne', name: 'Fort Wayne', state: 'IN', photographers: 25 },
+            { id: 'jackson', name: 'Jackson', state: 'MS', photographers: 19 },
+            { id: 'modesto', name: 'Modesto', state: 'CA', photographers: 22 },
+            { id: 'honolulu', name: 'Honolulu', state: 'HI', photographers: 41 },
+            { id: 'anchorage', name: 'Anchorage', state: 'AK', photographers: 18 },
+            { id: 'fayetteville', name: 'Fayetteville', state: 'AR', photographers: 24 },
+            { id: 'lakeland', name: 'Lakeland', state: 'FL', photographers: 27 },
+            { id: 'akron', name: 'Akron', state: 'OH', photographers: 23 },
+            { id: 'springfield', name: 'Springfield', state: 'MA', photographers: 21 },
+            { id: 'corpus-christi', name: 'Corpus Christi', state: 'TX', photographers: 24 },
+            { id: 'fort-collins', name: 'Fort Collins', state: 'CO', photographers: 28 },
+            { id: 'greenville-nc', name: 'Greenville', state: 'NC', photographers: 20 },
+            { id: 'pensacola', name: 'Pensacola', state: 'FL', photographers: 22 },
+            { id: 'syracuse', name: 'Syracuse', state: 'NY', photographers: 24 },
+            { id: 'salem', name: 'Salem', state: 'OR', photographers: 23 },
+            { id: 'huntsville', name: 'Huntsville', state: 'AL', photographers: 27 },
+            { id: 'santa-rosa', name: 'Santa Rosa', state: 'CA', photographers: 26 },
+            { id: 'durham', name: 'Durham', state: 'NC', photographers: 29 },
+            { id: 'ann-arbor', name: 'Ann Arbor', state: 'MI', photographers: 28 },
+            
+            // Additional Major Cities (100+)
+            { id: 'fort-lauderdale', name: 'Fort Lauderdale', state: 'FL', photographers: 45 },
+            { id: 'boulder', name: 'Boulder', state: 'CO', photographers: 31 },
+            { id: 'asheville', name: 'Asheville', state: 'NC', photographers: 29 },
+            { id: 'tallahassee', name: 'Tallahassee', state: 'FL', photographers: 23 },
+            { id: 'savannah', name: 'Savannah', state: 'GA', photographers: 27 },
+            { id: 'gainesville', name: 'Gainesville', state: 'FL', photographers: 21 },
+            { id: 'mesa', name: 'Mesa', state: 'AZ', photographers: 34 },
+            { id: 'scottsdale', name: 'Scottsdale', state: 'AZ', photographers: 38 },
+            { id: 'santa-barbara', name: 'Santa Barbara', state: 'CA', photographers: 32 },
+            { id: 'long-beach', name: 'Long Beach', state: 'CA', photographers: 41 },
+            { id: 'oakland', name: 'Oakland', state: 'CA', photographers: 48 },
+            { id: 'jersey-city', name: 'Jersey City', state: 'NJ', photographers: 36 },
+            { id: 'newark', name: 'Newark', state: 'NJ', photographers: 33 },
+            { id: 'arlington', name: 'Arlington', state: 'TX', photographers: 35 },
+            { id: 'plano', name: 'Plano', state: 'TX', photographers: 32 },
+            { id: 'irvine', name: 'Irvine', state: 'CA', photographers: 37 },
+            { id: 'anaheim', name: 'Anaheim', state: 'CA', photographers: 39 },
+            { id: 'santa-ana', name: 'Santa Ana', state: 'CA', photographers: 33 },
+            { id: 'chandler', name: 'Chandler', state: 'AZ', photographers: 31 },
+            { id: 'gilbert', name: 'Gilbert', state: 'AZ', photographers: 28 },
+            { id: 'glendale', name: 'Glendale', state: 'AZ', photographers: 29 },
+            { id: 'tempe', name: 'Tempe', state: 'AZ', photographers: 30 },
+            { id: 'frisco', name: 'Frisco', state: 'TX', photographers: 26 },
+            { id: 'mckinney', name: 'McKinney', state: 'TX', photographers: 24 },
+            { id: 'fort-worth', name: 'Fort Worth', state: 'TX', photographers: 52 },
+            { id: 'arlington-va', name: 'Arlington', state: 'VA', photographers: 34 },
+            { id: 'alexandria', name: 'Alexandria', state: 'VA', photographers: 31 },
+            { id: 'cambridge', name: 'Cambridge', state: 'MA', photographers: 36 },
+            { id: 'naperville', name: 'Naperville', state: 'IL', photographers: 28 },
+            { id: 'aurora', name: 'Aurora', state: 'CO', photographers: 27 },
+            { id: 'santa-clarita', name: 'Santa Clarita', state: 'CA', photographers: 29 },
+            { id: 'carlsbad', name: 'Carlsbad', state: 'CA', photographers: 26 },
+            { id: 'bend', name: 'Bend', state: 'OR', photographers: 25 },
+            { id: 'eugene', name: 'Eugene', state: 'OR', photographers: 27 },
+            { id: 'tacoma', name: 'Tacoma', state: 'WA', photographers: 32 },
+            { id: 'bellevue', name: 'Bellevue', state: 'WA', photographers: 35 },
+            { id: 'everett', name: 'Everett', state: 'WA', photographers: 24 },
+            { id: 'kent', name: 'Kent', state: 'WA', photographers: 22 },
+            { id: 'renton', name: 'Renton', state: 'WA', photographers: 21 },
+            { id: 'bellingham', name: 'Bellingham', state: 'WA', photographers: 23 },
+            { id: 'olympia', name: 'Olympia', state: 'WA', photographers: 24 },
+            { id: 'provo', name: 'Provo', state: 'UT', photographers: 26 },
+            { id: 'ogden', name: 'Ogden', state: 'UT', photographers: 22 },
+            { id: 'reno', name: 'Reno', state: 'NV', photographers: 29 },
+            { id: 'henderson', name: 'Henderson', state: 'NV', photographers: 27 },
+            { id: 'lincoln', name: 'Lincoln', state: 'NE', photographers: 25 },
+            { id: 'sioux-falls', name: 'Sioux Falls', state: 'SD', photographers: 23 },
+            { id: 'fargo', name: 'Fargo', state: 'ND', photographers: 21 },
+            { id: 'cedar-rapids', name: 'Cedar Rapids', state: 'IA', photographers: 22 },
+            { id: 'davenport', name: 'Davenport', state: 'IA', photographers: 20 },
+            { id: 'green-bay', name: 'Green Bay', state: 'WI', photographers: 24 },
+            { id: 'appleton', name: 'Appleton', state: 'WI', photographers: 21 },
+            { id: 'duluth', name: 'Duluth', state: 'MN', photographers: 19 },
+            { id: 'rochester-mn', name: 'Rochester', state: 'MN', photographers: 23 },
+            { id: 'lansing', name: 'Lansing', state: 'MI', photographers: 22 },
+            { id: 'kalamazoo', name: 'Kalamazoo', state: 'MI', photographers: 20 },
+            { id: 'toledo', name: 'Toledo', state: 'OH', photographers: 24 },
+            { id: 'youngstown', name: 'Youngstown', state: 'OH', photographers: 19 },
+            { id: 'canton', name: 'Canton', state: 'OH', photographers: 20 },
+            { id: 'lexington', name: 'Lexington', state: 'KY', photographers: 28 },
+            { id: 'greensboro', name: 'Greensboro', state: 'NC', photographers: 26 },
+            { id: 'winston-salem', name: 'Winston-Salem', state: 'NC', photographers: 24 },
+            { id: 'wilmington', name: 'Wilmington', state: 'NC', photographers: 27 },
+            { id: 'myrtle-beach', name: 'Myrtle Beach', state: 'SC', photographers: 25 }
+        ];
+
+        // Sample photographer data
+        const samplePhotographers = [
+            {
+                name: 'Sarah Johnson Photography',
+                location: 'Downtown',
+                bio: 'Specializing in family and children\'s mini sessions. Capturing your precious moments with a natural, candid style.',
+                price: 150,
+                plan: 'premium',
+                portfolio: ['📸', '🎨', '✨'],
+                available: true,
+                rating: 4.9,
+                bookings: 127
+            },
+            {
+                name: 'Michael Chen Studios',
+                location: 'Midtown',
+                bio: 'Creative mini sessions with a modern twist. Let\'s create something amazing together!',
+                price: 200,
+                plan: 'premium',
+                portfolio: ['📷', '🌟', '💫'],
+                available: true,
+                rating: 4.8,
+                bookings: 95
+            },
+            {
+                name: 'Emma Rodriguez Photos',
+                location: 'Uptown',
+                bio: 'Warm, joyful photography for families. Making mini sessions fun and stress-free.',
+                price: 125,
+                plan: 'basic',
+                portfolio: ['🎭', '🎪', '🎨'],
+                available: false,
+                rating: 4.7,
+                bookings: 83
+            },
+            {
+                name: 'David Park Photography',
+                location: 'West End',
+                bio: 'Professional mini sessions with an artistic eye. Creating memories that last forever.',
+                price: 175,
+                plan: 'premium',
+                portfolio: ['🖼️', '🎬', '📸'],
+                available: true,
+                rating: 5.0,
+                bookings: 156
+            },
+            {
+                name: 'Jessica Williams Creative',
+                location: 'East Side',
+                bio: 'Fun, energetic mini sessions perfect for kids and families. Let your personalities shine!',
+                price: 140,
+                plan: 'basic',
+                portfolio: ['🌈', '⭐', '🎨'],
+                available: false,
+                rating: 4.6,
+                bookings: 71
+            },
+            {
+                name: 'Alex Thompson Photography',
+                location: 'South District',
+                bio: 'Lifestyle mini sessions in beautiful outdoor settings. Natural light specialist.',
+                price: 185,
+                plan: 'premium',
+                portfolio: ['🌿', '☀️', '🌸'],
+                available: true,
+                rating: 4.9,
+                bookings: 142
+            }
+        ];
+
+        let currentMetro = null;
+        let allPhotographers = [];
+
+        // Initialize the page
+        function init() {
+            renderMetroAreas();
+            populateMetroDropdown();
+        }
+
+        // Render metro areas
+        function renderMetroAreas() {
+            const metroGrid = document.getElementById('metroGrid');
+            metroGrid.innerHTML = metroAreas.map(metro => `
+                <div class="metro-card" onclick="selectMetro('${metro.id}', '${metro.name}', '${metro.state}')">
+                    <h3>${metro.name}, ${metro.state}</h3>
+                    <p>${metro.photographers} photographers available</p>
+                </div>
+            `).join('');
+        }
+
+        // Filter metros by search
+        function filterMetros() {
+            const search = document.getElementById('metroSearch').value.toLowerCase();
+            const filtered = metroAreas.filter(metro => 
+                metro.name.toLowerCase().includes(search) || 
+                metro.state.toLowerCase().includes(search)
+            );
+            
+            const metroGrid = document.getElementById('metroGrid');
+            metroGrid.innerHTML = filtered.map(metro => `
+                <div class="metro-card" onclick="selectMetro('${metro.id}', '${metro.name}', '${metro.state}')">
+                    <h3>${metro.name}, ${metro.state}</h3>
+                    <p>${metro.photographers} photographers available</p>
+                </div>
+            `).join('');
+        }
+
+        // Select a metro area
+        function selectMetro(id, name, state) {
+            currentMetro = { id, name, state };
+            document.getElementById('metroTitle').textContent = `Mini Session Photographers in ${name}, ${state}`;
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('metroPage').classList.remove('hidden');
+            
+            // Generate photographers for this metro
+            allPhotographers = samplePhotographers.map(p => ({...p}));
+            renderPhotographers(allPhotographers);
+            window.scrollTo(0, 0);
+        }
+
+        // Render photographers
+        function renderPhotographers(photographers) {
+            const grid = document.getElementById('photographerGrid');
+            grid.innerHTML = photographers.map(p => `
+                <div class="photographer-card">
+                    <div class="photographer-image">
+                        ${p.portfolio.join(' ')}
+                    </div>
+                    <div class="photographer-info">
+                        ${p.plan === 'premium' ? '<span class="badge">Premium</span>' : ''}
+                        <div class="photographer-name">${p.name}</div>
+                        <div class="photographer-location">📍 ${p.location}, ${currentMetro.name}</div>
+                        <div class="photographer-bio">${p.bio}</div>
+                        <div class="photographer-price">$${p.price} per session</div>
+                        <div class="photographer-actions">
+                            <a href="#" class="btn btn-secondary">View Portfolio</a>
+                            ${p.plan === 'premium' && p.available ? 
+                                '<a href="#" class="btn btn-primary">Book Now</a>' : 
+                                '<a href="#" class="btn btn-primary">Contact</a>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter photographers
+        function filterPhotographers() {
+            let filtered = [...allPhotographers];
+            
+            // Price filter
+            const priceFilter = document.getElementById('priceFilter').value;
+            if (priceFilter) {
+                const [min, max] = priceFilter.includes('+') ? 
+                    [parseInt(priceFilter), Infinity] : 
+                    priceFilter.split('-').map(Number);
+                filtered = filtered.filter(p => p.price >= min && p.price <= max);
+            }
+            
+            // Availability filter
+            const availFilter = document.getElementById('availabilityFilter').value;
+            if (availFilter === 'available') {
+                filtered = filtered.filter(p => p.available);
+            } else if (availFilter === 'premium') {
+                filtered = filtered.filter(p => p.plan === 'premium');
+            }
+            
+            // Sort
+            const sort = document.getElementById('sortFilter').value;
+            if (sort === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sort === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sort === 'featured') {
+                filtered.sort((a, b) => b.bookings - a.bookings);
+            }
+            
+            renderPhotographers(filtered);
+        }
+
+        // Show home page
+        function showHome() {
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('metroPage').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Show section
+        function showSection(section) {
+            document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function showSignupModal(plan = 'basic') {
+            document.getElementById('planSelect').value = plan;
+            document.getElementById('signupModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Populate metro dropdown in signup
+        function populateMetroDropdown() {
+            const select = document.getElementById('signupMetro');
+            select.innerHTML = '<option value="">Select your metro area...</option>' +
+                metroAreas.map(m => `<option value="${m.id}">${m.name}, ${m.state}</option>`).join('');
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            alert('Login functionality would connect to backend authentication system');
+            closeModal('loginModal');
+            // In production, this would authenticate and show dashboard
+        }
+
+        // Handle signup
+        function handleSignup(e) {
+            e.preventDefault();
+            const plan = document.getElementById('planSelect').value;
+            alert(`Account created! You've selected the ${plan} plan. In production, this would process payment and create your profile.`);
+            closeModal('signupModal');
+            // In production, this would process payment and create account
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
